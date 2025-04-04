@@ -1,0 +1,40 @@
+<h1 class="bg-animate">
+  <span class="bg-wrap"><span class="text-animate">天気予報アプリ</span></span>
+</h1>
+
+<div class="stroke" data-controller="border">
+  <div class="border top"></div>
+  <div class="border right"></div>
+  <div class="border bottom"></div>
+  <div class="border left"></div>
+  <div class="description">
+    <p>このアプリは、OpenWeatherのAPIを使用して天気情報を取得しています。</p>
+    <p>検索ボタンを押すと、サーバー側で指定した都市の天気データを取得し、画面に表示します。</p>
+    <p>APIリクエストの仕組みは以下の通りです：</p>
+  </div>
+  <div data-controller="weather">
+    <div class="c-loader-bg" data-weather-target="loader">
+      <div class="c-loader"></div>
+    </div>
+    <ul>
+      <li>選択した都市名（osaka / tokyo）をサーバーに送信</li>
+      <li>サーバー側で OpenWeather API に GET リクエストを送信</li>
+      <li>APIのURLには、「都市名」 と 「APIキー」 が含まれる</li>
+      <li>取得した JSON レスポンスを解析し、天気情報（気温、湿度、風速など）を画面に表示</li>
+    </ul>
+    <div class="weather-form-container">
+        <%= form_with url: weather_search_path, method: :get, data: { action: "submit->weather#search" } do %>
+          <label for="city">都市名:</label>
+          <select id="city" data-weather-target="city" name="city">
+            <option value="osaka">大阪</option>
+            <option value="tokyo">東京</option>
+          </select>
+          <button type="submit">検索</button>
+          <div id="weather-result" data-weather-target="result"></div>
+          <canvas id="weather-chart" data-weather-target="chart"></canvas>
+        <% end %>
+      </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
