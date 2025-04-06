@@ -187,3 +187,28 @@ h2 {
   width: 100%;
   height: 0px;
 }
+
+.weather-form-container label {
+  font-size: 1.2rem;
+}
+
+.weather-form-container select,
+.weather-form-container button {
+  padding: 0.6rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  line-height: 1;
+  height: 40px;
+}
+
+.weather-form-container button {
+  background-color: #ffffff83;
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.weather-form-container button:hover {
+  color: white;
+  background-color: #131eb5f3;
+}

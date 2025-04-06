@@ -8,13 +8,24 @@ class WeatherController < ApplicationController
 
   def search
     city = params[:city]
+    lat = params[:lat]
+    lng = params[:lng]
     api_key = ENV["OPENWEATHER_API_KEY"]
 
-    current_url = "https://api.openweathermap.org/data/2.5/weather?q=#{URI.encode_www_form_component(city)}&appid=#{api_key}&units=metric&lang=ja"
+    if lat.present? && lng.present?
+      current_url = "https://api.openweathermap.org/data/2.5/weather?lat=#{lat}&lon=#{lng}&appid=#{api_key}&units=metric&lang=ja"
+      forecast_url = "https://api.openweathermap.org/data/2.5/forecast?lat=#{lat}&lon=#{lng}&appid=#{api_key}&units=metric&lang=ja"
+    elsif city.present?
+      current_url = "https://api.openweathermap.org/data/2.5/weather?q=#{URI.encode_www_form_component(city)}&appid=#{api_key}&units=metric&lang=ja"
+      forecast_url = "https://api.openweathermap.org/data/2.5/forecast?q=#{URI.encode_www_form_component(city)}&appid=#{api_key}&units=metric&lang=ja"
+    else
+      flash[:alert] = "都市名または座標を指定してください。"
+      redirect_to root_path
+      return
+    end
+  
     current_response = Net::HTTP.get(URI(current_url))
-    current_data = JSON.parse(current_response)
-
-    forecast_url = "https://api.openweathermap.org/data/2.5/forecast?q=#{URI.encode_www_form_component(city)}&appid=#{api_key}&units=metric&lang=ja"
+    current_data = JSON.parse(current_response)  
     forecast_response = Net::HTTP.get(URI(forecast_url))
     forecast_data = JSON.parse(forecast_response)
 
@@ -30,14 +41,14 @@ class WeatherController < ApplicationController
           temp: forecast["main"]["temp"]
         }
       end
-
+      
       render json: {
         name: forecast_data["city"]["name"],
         temp: today_forecast["main"]["temp"],
         humidity: today_forecast["main"]["humidity"],
         wind_speed: today_forecast["wind"]["speed"],
         description: today_forecast["weather"][0]["description"],
-        icon: "https://openweathermap.org/img/wn/#{today_forecast["weather"][0]["icon"]}.png",
+        icon: "https://openweathermap.org/img/wn/#{force_day_icon(today_forecast["weather"][0]["icon"])}.png",
         chart_data: chart_data,
         current_data: {
           date: Time.at(current_data["dt"]).strftime("%Y-%m-%d %H:%M:%S"),
@@ -46,11 +57,15 @@ class WeatherController < ApplicationController
           humidity: current_data["main"]["humidity"],
           wind_speed: current_data["wind"]["speed"],
           description: current_data["weather"][0]["description"],
-          icon: "https://openweathermap.org/img/wn/#{current_data["weather"][0]["icon"]}.png"
+          icon: "https://openweathermap.org/img/wn/#{force_day_icon(current_data["weather"][0]["icon"])}.png"
         }
       }
     else
       render json: { error: "都市が見つかりません" }, status: :not_found
     end
+  end
+
+  def force_day_icon(icon_code)
+    icon_code.gsub("n", "d")
   end
 end
