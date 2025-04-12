@@ -26,21 +26,21 @@
     </ul>
     <div class="weather-form-container">
       <%= form_with url: weather_search_path, method: :get, data: { action: "submit->weather#search" } do %>
-        <label for="city"><strong>都市名:</strong></label>
-        <select id="city" data-weather-target="city" name="city">
-          <option value="hokkaido">北海道</option>
-          <option value="miyagi">宮城</option>
-          <option value="tokyo">東京</option>
-          <option value="niigata">新潟</option>
-          <option value="ishikawa">石川</option>
-          <option value="aichi">愛知</option>
-          <option value="osaka" selected>大阪</option>
-          <option value="hiroshima">広島</option>
-          <option value="kochi">高知</option>
-          <option value="fukuoka">福岡</option>
-          <option value="kagoshima">鹿児島</option>
-          <option value="okinawa">沖縄</option>
-        </select>
+        <select id="city" name="city" data-controller="select" data-weather-target="city" >
+          <option value="" selected>都市を選んでください</option>
+          <option value="hokkaido" data-image="<%= asset_path('hokkaido.png') %>">北海道</option>
+          <option value="miyagi" data-image="<%= asset_path('miyagi.png') %>">宮城</option>
+          <option value="tokyo" data-image="<%= asset_path('tokyo.png') %>">東京</option>
+          <option value="niigata" data-image="<%= asset_path('niigata.png') %>">新潟</option>
+          <option value="ishikawa" data-image="<%= asset_path('ishikawa.png') %>">石川</option>
+          <option value="aichi" data-image="<%= asset_path('aichi.png') %>">愛知</option>
+          <option value="osaka" data-image="<%= asset_path('osaka.png') %>">大阪</option>
+          <option value="hiroshima" data-image="<%= asset_path('hiroshima.png') %>">広島</option>
+          <option value="kochi" data-image="<%= asset_path('kochi.png') %>">高知</option>
+          <option value="fukuoka" data-image="<%= asset_path('fukuoka.png') %>">福岡</option>
+          <option value="kagoshima" data-image="<%= asset_path('kagoshima.png') %>">鹿児島</option>
+          <option value="okinawa" data-image="<%= asset_path('okinawa.png') %>">沖縄</option>
+        </select>        
         <button type="submit">表示</button>
         <div id="weather-result" data-weather-target="result"></div>
         <canvas id="weather-chart" data-weather-target="chart"></canvas>
