@@ -33,22 +33,29 @@ export default class extends Controller {
       }
 
       this.resultTarget.innerHTML = `
-        <h2 class="bg-animate">
-          <span class="bg-wrap"><span class="text-animate">現在の${data.current_data.name}</span></span>
+        <h2 class="bg-gradient-to-r from-blue-600 to-blue-500 text-white py-2 text-center text-xl rounded-md shadow-sm mt-6 mb-4">
+            <span>現在の${data.current_data.name}</span>
         </h2>
-        <p>日時: ${data.current_data.date}</p>
-        <p>気温: ${data.current_data.temp}°C</p>
-        <p>湿度: ${data.current_data.humidity}%</p>
-        <p class="wind-speed">風速: ${data.current_data.wind_speed} m/s</p>
-        <div style="display: flex; align-items: center;">
-          <p style="margin-right: 10px;">天気: ${data.current_data.description}</p>
-          <img src="${data.current_data.icon}" alt="${data.current_data.description}" style="width: 50px; height: 50px;">
+        <div class="flex">
+          <div class="w-1/2 bg-white rounded-lg shadow-md p-6 mt-2 border border-gray-200">
+            <div class="flex flex-col mb-2">
+              <p class="text-gray-700 mr-2">天気: <span class="font-medium">${data.current_data.description}</span></p>
+              <img src="${data.current_data.icon}" alt="${data.current_data.description}" class="w-24 h-24">
+            </div>
+          </div>
+          <div class="w-1/2 bg-white rounded-lg shadow-md p-6 mt-2 border border-gray-200">
+            <p class="text-gray-700 mb-2">日時: <span class="font-medium">${data.current_data.date}</span></p>
+            <p class="text-gray-700 mb-2">気温: <span class="font-medium">${data.current_data.temp}°C</span></p>
+            <p class="text-gray-700 mb-2">湿度: <span class="font-medium">${data.current_data.humidity}%</span></p>
+            <p class="text-gray-700 mb-2 wind-speed">風速: <span class="font-medium">${data.current_data.wind_speed} m/s</span></p>
+          </div>
         </div>
-        <p>
-          <h2 class="bg-animate">
-            <span class="bg-wrap"><span class="text-animate">５日間の気温変化</span></span>
-          </h2>
-        </p>
+        <h2 class="bg-gradient-to-r from-blue-600 to-blue-500 text-white py-2 text-center text-xl rounded-md shadow-sm mt-6 mb-4">
+            <span>５日間の気温変化</span>
+        </h2>
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6 border border-gray-200">  
+          <canvas id="weather-chart" data-map-target="chart"></canvas>
+        </div>
       `;
 
       this.updateChart(data.chart_data);

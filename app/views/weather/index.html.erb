@@ -1,60 +1,69 @@
-<h1 class="bg-animate">
-  <span class="bg-wrap"><span class="text-animate">天気予報アプリ</span></span>
+<h1 class="bg-gradient-to-r from-blue-600 to-indigo-60 text-white py-4 text-left text-3xl font-bold shadow-md pl-4">
+  <span class="inline-block">天気予報アプリ</span>
 </h1>
 
-<div class="stroke" data-controller="border">
-  <div class="border top"></div>
-  <div class="border right"></div>
-  <div class="border bottom"></div>
-  <div class="border left"></div>
-  <div class="description">
-    <p>このアプリは、OpenWeatherAPIとMapsJavaScriptAPIを利用しています。</p>
-    <p>下記の<strong>都市名を選択して「表示」ボタンを押す</strong>、または<strong>マップ上を「クリック」</strong>してください。</p>
-    <p>サーバ側で天気データを取得し、現在の天気と５日間の気温変化を表示します。</p>
-    <p>APIリクエストの流れは以下の通りです</p>
-  </div>
+<div class="bg-white rounded-lg shadow-lg overflow-hidden m-6 p-6 border border-gray-200">
+  <div class="relative">
+    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-200 to-indigo-200 opacity-20 rounded-lg"></div>
+    <div class="relative p-4">
+      <div class="mb-4 text-black-700">
+        <p class="mb-2">このアプリは、OpenWeatherAPIとMapsJavaScriptAPIを利用しています。</p>
+        <p class="mb-2">下記の都市名を選択して「表示」ボタンを押す、またはマップ上を「クリック」してください。</p>
+        <p class="mb-2">サーバ側で天気データを取得し、現在の天気と５日間の気温変化を表示します。</p>
+        <p >APIリクエストの流れは以下の通りです</p>
+        <ul class="list-disc pl-5 text-gray-700">
+          <li>ブラウザから「選択した都市名」または「座標」をサーバに送信</li>
+          <li>サーバ側で OpenWeatherAPI に GET リクエストを送信</li>
+          <li>APIのURLには、「都市名」 と 「APIキー」 が含まれる</li>
+          <li>APIから取得した JSON レスポンスを解析し、天気情報（気温、湿度、風速など）を画面に表示</li>
+        </ul>
+      </div>
 
-  <div data-controller="weather">
-    <div class="c-loader-bg" data-weather-target="loader">
-      <div class="c-loader"></div>
-    </div>
-    <ul>
-      <li>ブラウザから「選択した都市名」または「座標」をサーバに送信</li>
-      <li>サーバ側で OpenWeatherAPI に GET リクエストを送信</li>
-      <li>APIのURLには、「都市名」 と 「APIキー」 が含まれる</li>
-      <li>APIから取得した JSON レスポンスを解析し、天気情報（気温、湿度、風速など）を画面に表示</li>
-    </ul>
-    <div class="weather-form-container">
-      <%= form_with url: weather_search_path, method: :get, data: { action: "submit->weather#search" } do %>
-        <select id="city" name="city" data-controller="select" data-weather-target="city" >
-          <option value="" selected>都市を選んでください</option>
-          <option value="hokkaido" data-image="<%= asset_path('hokkaido.png') %>">北海道</option>
-          <option value="miyagi" data-image="<%= asset_path('miyagi.png') %>">宮城</option>
-          <option value="tokyo" data-image="<%= asset_path('tokyo.png') %>">東京</option>
-          <option value="niigata" data-image="<%= asset_path('niigata.png') %>">新潟</option>
-          <option value="ishikawa" data-image="<%= asset_path('ishikawa.png') %>">石川</option>
-          <option value="aichi" data-image="<%= asset_path('aichi.png') %>">愛知</option>
-          <option value="osaka" data-image="<%= asset_path('osaka.png') %>">大阪</option>
-          <option value="hiroshima" data-image="<%= asset_path('hiroshima.png') %>">広島</option>
-          <option value="kochi" data-image="<%= asset_path('kochi.png') %>">高知</option>
-          <option value="fukuoka" data-image="<%= asset_path('fukuoka.png') %>">福岡</option>
-          <option value="kagoshima" data-image="<%= asset_path('kagoshima.png') %>">鹿児島</option>
-          <option value="okinawa" data-image="<%= asset_path('okinawa.png') %>">沖縄</option>
-        </select>        
-        <button type="submit">表示</button>
-        <div id="weather-result" data-weather-target="result"></div>
-        <canvas id="weather-chart" data-weather-target="chart"></canvas>
-      <% end %>
+      <div data-controller="weather" class="mb-4">
+        <div class="c-loader-bg fixed top-0 left-0 w-full h-full bg-gray-100 bg-opacity-50 flex justify-center items-center z-50 hidden" data-weather-target="loader">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+
+        <div class="mt-4">
+          <%= form_with url: weather_search_path, method: :get, data: { action: "submit->weather#search" } do %>
+            <div class="flex">
+              <div class="w-1/2">
+                <select id="city" name="city" data-controller="select" data-weather-target="city" class="mb-4 appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight">
+                  <option value="" selected>都市を選んでください</option>
+                  <option value="hokkaido" data-image="<%= asset_path('hokkaido.png') %>">北海道</option>
+                  <option value="miyagi" data-image="<%= asset_path('miyagi.png') %>">宮城</option>
+                  <option value="tokyo" data-image="<%= asset_path('tokyo.png') %>">東京</option>
+                  <option value="niigata" data-image="<%= asset_path('niigata.png') %>">新潟</option>
+                  <option value="ishikawa" data-image="<%= asset_path('ishikawa.png') %>">石川</option>
+                  <option value="aichi" data-image="<%= asset_path('aichi.png') %>">愛知</option>
+                  <option value="osaka" data-image="<%= asset_path('osaka.png') %>">大阪</option>
+                  <option value="hiroshima" data-image="<%= asset_path('hiroshima.png') %>">広島</option>
+                  <option value="kochi" data-image="<%= asset_path('kochi.png') %>">高知</option>
+                  <option value="fukuoka" data-image="<%= asset_path('fukuoka.png') %>">福岡</option>
+                  <option value="kagoshima" data-image="<%= asset_path('kagoshima.png') %>">鹿児島</option>
+                  <option value="okinawa" data-image="<%= asset_path('okinawa.png') %>">沖縄</option>
+                </select>
+              </div>
+              <button type="submit" class="w-1/16 h-9 mt-2 mb-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-indigo-500 hover:to-indigo-600 text-white rounded focus:outline-none focus:shadow-outline">
+                表示
+              </button>
+            </div>
+            <div id="weather-result" data-weather-target="result"></div>
+            <canvas id="weather-chart" data-weather-target="chart"></canvas>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div data-controller="map">
+          <div data-map-target="select" style="height: 400px" class="rounded-md shadow-md border border-gray-300"></div>
+          <div class="c-loader-bg fixed top-0 left-0 w-full h-full bg-gray-100 bg-opacity-50 flex justify-center items-center z-50 hidden" data-map-target="loader">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-500 border-solid"></div>
+          </div>
+          <div id="weather-result" data-map-target="result"></div>
+          <canvas id="weather-chart" data-map-target="chart"></canvas>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div data-controller="map">
-    <div data-map-target="select" style="height: 400px"></div>
-    <div class="c-loader-bg" data-map-target="loader">
-      <div class="c-loader"></div>
-    </div>
-    <div id="weather-result" data-map-target="result"></div>
-    <canvas id="weather-chart" data-map-target="chart"></canvas>
-  </div>
-
 </div>
